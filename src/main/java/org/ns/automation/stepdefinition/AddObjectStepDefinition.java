@@ -1,5 +1,15 @@
 package org.ns.automation.stepdefinition;
 
+import java.io.File;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.MediaType;
+import org.ns.automation.model.RequestDataPojo;
+import org.ns.automation.model.RequestPojo;
+import org.ns.automation.utils.TestContext;
+
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
@@ -9,23 +19,13 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.MediaType;
-import org.ns.automation.model.RequestDataPojo;
-import org.ns.automation.model.RequestPojo;
-import org.ns.automation.utils.TestContext;
-
-import java.io.File;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 public class AddObjectStepDefinition {
 
     private final TestContext context;
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public static final String CREATE_REQUEST = "create_request";
 
@@ -36,8 +36,9 @@ public class AddObjectStepDefinition {
 
     @Before
     public static void setup(){
+        //The API accepts only 100 requests per day. This check is to make sure the request limit not reached in a day
         Response response = RestAssured.given()
-                .baseUri("https://restful-api.dev/")
+                .baseUri("https://api.restful-api.dev/objects/1")
                 .contentType(MediaType.APPLICATION_JSON.toString())
                 .accept(MediaType.APPLICATION_JSON.toString()).get();
         assertTrue(response.statusCode() == 200);
