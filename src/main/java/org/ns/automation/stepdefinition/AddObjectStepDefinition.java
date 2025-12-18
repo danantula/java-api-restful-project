@@ -25,7 +25,7 @@ public class AddObjectStepDefinition {
 
     private final TestContext context;
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public static final String CREATE_REQUEST = "create_request";
 
